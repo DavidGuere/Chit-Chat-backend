@@ -1,0 +1,29 @@
+#Types
+type User{
+    userId: ID,
+    nickname: String,
+    password: String,
+    connected: String
+}
+
+type User2{
+    userId: ID,
+    nickname: String!,
+    password: String,
+    connected: String,
+    chatRooms: [String]
+}
+
+#Queries
+type Query{
+    getUser(userId: Int): User
+}
+
+#type GetUsers2{
+#    getUser(id: Int): User2
+#}
+
+#Schemas
+schema{
+    query: Query
+}
