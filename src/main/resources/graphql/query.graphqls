@@ -1,13 +1,6 @@
 #Types
 type User{
     userId: ID,
-    nickname: String,
-    password: String,
-    connected: String
-}
-
-type User2{
-    userId: ID,
     nickname: String!,
     password: String,
     connected: String,
@@ -17,11 +10,15 @@ type User2{
 #Queries
 type Query{
     getUser(userId: Int): User
+    logoutUser(userId: Int): String
+    loginUser(userId: Int): String
+    saveUserChatRoomToFirestore(userId: Int, roomId: Int): String
+    removeUserChatRoomFromFirebase(userId: Int, roomId: Int): String
+    saveToFirestore(newUser: String): String
+    isRoomIDAvailable(roomId: String): Boolean
+    createNewRoom(roomId: String): String
 }
 
-#type GetUsers2{
-#    getUser(id: Int): User2
-#}
 
 #Schemas
 schema{

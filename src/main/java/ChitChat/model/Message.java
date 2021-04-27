@@ -1,10 +1,9 @@
 package ChitChat.model;
 
 public class Message {
-    private int roomId;
+    private String roomId;
     private int messageId;
     private String user;
-    private int userId;
     private String message;
 
     public Message() {
@@ -17,11 +16,10 @@ public class Message {
      * @param user Nickname of the user.
      * @param message Massage sent by the user.
      */
-    public Message(int roomId, int messageId, String user, int userId, String message) {
+    public Message(String roomId, int messageId, String user, String message) {
         this.roomId = roomId;
         this.messageId = messageId;
         this.user = user;
-        this.userId = userId;
         this.message = message;
     }
 
@@ -49,19 +47,12 @@ public class Message {
         this.message = message;
     }
 
-    public int getRoomId() {
+    public String getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 }

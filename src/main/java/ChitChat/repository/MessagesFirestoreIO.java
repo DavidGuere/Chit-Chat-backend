@@ -9,7 +9,6 @@ import ChitChat.model.Message;
 
 import java.util.concurrent.ExecutionException;
 
-//@Service
 public class MessagesFirestoreIO {
 
     /**
@@ -28,13 +27,13 @@ public class MessagesFirestoreIO {
             Message messagePayload = jsonToMessage.readValue(json, Message.class);
 
             // get collection if exist
-            String collectionID = Integer.toString(messagePayload.getRoomId());
-            ApiFuture<QuerySnapshot> collection = db.collection(collectionID).get();
+            String collectionID = messagePayload.getRoomId();
+            ApiFuture<QuerySnapshot> collection = db.collection("ChatRooms").document("rooms").collection(collectionID).get();
             QuerySnapshot getCollection = collection.get();
 
             if (!getCollection.isEmpty()){
                 // get last messageId from document
-                Query lastMessageId = db.collection(collectionID).orderBy("messageId", Query.Direction.valueOf("ASCENDING")).limitToLast(1);
+                Query lastMessageId = db.collection("ChatRooms").document("rooms").collection(collectionID).orderBy("messageId", Query.Direction.valueOf("ASCENDING")).limitToLast(1);
                 // convert query List to object List and get the first message
                 Message tempMessage = lastMessageId.get().get().toObjects(Message.class).get(0);
 
@@ -42,12 +41,12 @@ public class MessagesFirestoreIO {
                 String newDocName =String.valueOf(messagePayload.getMessageId());
 
                 // Save to Firestore with updated id
-                ApiFuture<WriteResult> saveMessageData = db.collection(collectionID).document(newDocName).set(messagePayload);
+                ApiFuture<WriteResult> saveMessageData = db.collection("ChatRooms").document("rooms").collection(collectionID).document(newDocName).set(messagePayload);
 
             } else {
-                String newRoomID = Integer.toString(messagePayload.getRoomId());
+                String newRoomID = messagePayload.getRoomId();
                 String newDocName = Integer.toString(messagePayload.getMessageId());
-                DocumentReference docRef = db.collection(newRoomID).document(newDocName);
+                DocumentReference docRef = db.collection("ChatRooms").document("rooms").collection(newRoomID).document(newDocName);
                 ApiFuture<WriteResult> saveMessageData = docRef.set(messagePayload);
             }
 
@@ -61,22 +60,21 @@ public class MessagesFirestoreIO {
      * @param roomId The chatroom id to retrieve the message from.
      * @return Returns a Message object that contains the room id, user information and the message.
      */
-    public static Message retrieveFromFirestore (int roomId){
-        String collectionId = Integer.toString(roomId);
+    public static Message retrieveFromFirestore (String roomId){
+
         Message lastMessage = new Message();
 
         // Open Firestore connection
         Firestore db = FirestoreClient.getFirestore();
 
         try {
-            Query lastMessageId = db.collection(collectionId).orderBy("messageId", Query.Direction.valueOf("ASCENDING")).limitToLast(1);
+            Query lastMessageId = db.collection("ChatRooms").document("rooms").collection(roomId).orderBy("messageId", Query.Direction.valueOf("ASCENDING")).limitToLast(1);
             // convert query List to object List and get the first message
             Message tempMessage = lastMessageId.get().get().toObjects(Message.class).get(0);
 
             lastMessage.setRoomId(tempMessage.getRoomId());
             lastMessage.setMessageId(tempMessage.getMessageId());
             lastMessage.setUser(tempMessage.getUser());
-            lastMessage.setUserId(tempMessage.getUserId());
             lastMessage.setMessage(tempMessage.getMessage());
 
         } catch (InterruptedException | ExecutionException e) {
