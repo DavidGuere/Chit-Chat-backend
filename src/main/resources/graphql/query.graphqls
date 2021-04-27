@@ -14,7 +14,7 @@ type Query{
     loginUser(userId: Int): String
     saveUserChatRoomToFirestore(userId: Int, roomId: Int): String
     removeUserChatRoomFromFirebase(userId: Int, roomId: Int): String
-    saveToFirestore(newUser: String): String
+    saveToFirestore(newUser: String): Boolean
     isRoomIDAvailable(roomId: String): Boolean
     createNewRoom(roomId: String): String
 }

@@ -4,6 +4,9 @@ import ChitChat.config.FirebaseConnection;
 import ChitChat.util.WebSocketThread;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 
@@ -19,6 +22,7 @@ public class ChitChatApplication {
 		Thread thread1 = new Thread(webSocketServer);
 		thread1.start();
 	}
+
 
 }
 

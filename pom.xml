@@ -132,6 +132,11 @@
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 
 	</dependencies>

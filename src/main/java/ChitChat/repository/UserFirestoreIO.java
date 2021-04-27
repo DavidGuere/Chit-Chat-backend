@@ -9,6 +9,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import ChitChat.model.User;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +23,10 @@ public class UserFirestoreIO implements GraphQLQueryResolver {
     /**
      * Saves a new user to the Firestore database.
      * @param json Data of the new user in a JSON format.
-     * @return Returns a success or failure message
+     * @return Returns true if the creations was successful otherwise it returns false
      */
-    public static String saveToFirestore(String json){
+//    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public static Boolean saveToFirestore(String json){
         // Open Firestore connection
         Firestore db = FirestoreClient.getFirestore();
 
@@ -58,7 +60,7 @@ public class UserFirestoreIO implements GraphQLQueryResolver {
                     // Save to Firestore with updated id
                     ApiFuture<WriteResult> saveMessageData = db.collection("Users").document(newDocName).set(userPayload);
                 } else {
-                    return "The nickname already exists";
+                    return false;
                 }
 
             } else {
@@ -70,7 +72,7 @@ public class UserFirestoreIO implements GraphQLQueryResolver {
         } catch (JsonProcessingException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return "User created";
+        return true;
     }
 
     /**
@@ -103,6 +105,7 @@ public class UserFirestoreIO implements GraphQLQueryResolver {
      * @return Returns a welcome message
      */
     public static String loginUser(String userId){
+
         Firestore db = FirestoreClient.getFirestore();
         HashMap<String,String> loginUser = new HashMap<>();
         loginUser.put("connected", "true");
