@@ -5,6 +5,7 @@ public class Message {
     private int messageId;
     private String user;
     private String message;
+    private String source;
 
     public Message() {
     }
@@ -16,11 +17,12 @@ public class Message {
      * @param user Nickname of the user.
      * @param message Massage sent by the user.
      */
-    public Message(String roomId, int messageId, String user, String message) {
+    public Message(String roomId, int messageId, String user, String message, String source) {
         this.roomId = roomId;
         this.messageId = messageId;
         this.user = user;
         this.message = message;
+        this.source = source;
     }
 
     public int getMessageId() {
@@ -55,4 +57,22 @@ public class Message {
         this.roomId = roomId;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "roomId='" + roomId + '\'' +
+                ", messageId=" + messageId +
+                ", user='" + user + '\'' +
+                ", message='" + message + '\'' +
+                ", source='" + source + '\'' +
+                '}';
+    }
 }

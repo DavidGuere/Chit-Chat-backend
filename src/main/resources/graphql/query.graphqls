@@ -3,20 +3,33 @@ type User{
     userId: ID,
     nickname: String!,
     password: String,
-    connected: String,
-    chatRooms: [String]
+    connected: Boolean,
+    chatRooms: [String],
+    currentRoom: String
+}
+type Message{
+    roomId: String,
+    messageId: Int,
+    user: String,
+    message:String,
+    source: String
 }
 
 #Queries
 type Query{
     getUser(userId: Int): User
-    logoutUser(userId: Int): String
-    loginUser(userId: Int): String
-    saveUserChatRoomToFirestore(userId: Int, roomId: Int): String
-    removeUserChatRoomFromFirebase(userId: Int, roomId: Int): String
-    saveToFirestore(newUser: String): Boolean
+    getUserByName(userNick: String): User
+    logoutUser(userId: Int): Boolean
+    loginUser(userNick: String, userPass: String): Boolean
+    saveUserChatRoomToFirestore(userId: Int, roomId: String): String
+    removeUserChatRoomFromFirebase(userId: Int, roomId: String): String
+    saveToFirestore(newUser: String): Int
     isRoomIDAvailable(roomId: String): Boolean
     createNewRoom(roomId: String): String
+    setUserCurrentRoom(userId: Int, roomId: String):String
+    joinUserToRoom(userId: Int, roomId: String): Boolean
+    leaveCurrentRoom(userId: Int): String
+    getLastMessages(roomId:String ): [Message]
 }
 
 

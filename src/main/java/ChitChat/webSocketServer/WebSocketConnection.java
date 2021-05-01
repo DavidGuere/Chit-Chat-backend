@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class WebSocketConnection extends WebSocketServer {
 
     // HashSet to add all the connections.
-    private HashSet<WebSocket> connections;
+    private HashSet<String> connections;
 
     public WebSocketConnection(InetSocketAddress address) {
         super(address);
@@ -26,8 +26,9 @@ public class WebSocketConnection extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        connections.add(webSocket);
+        connections.add(webSocket.getRemoteSocketAddress().getAddress().getHostAddress());
         System.out.println("New user connected from :" + webSocket.getRemoteSocketAddress().getAddress().getHostAddress());
+
     }
 
     @Override
@@ -38,26 +39,13 @@ public class WebSocketConnection extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String messageJSON) {
-        System.out.println(messageJSON);
-        try {
-            MessagesFirestoreIO.saveToFirestore(messageJSON);
-
-            ObjectMapper JsonToMessage = new ObjectMapper();
-            Message messagePayload = JsonToMessage.readValue(messageJSON, Message.class);
-
-            String roomId = messagePayload.getRoomId();
-
-            Message lastMessage = MessagesFirestoreIO.retrieveFromFirestore(roomId);
-            broadcastMessage(lastMessage);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        Message messageToBroadcast = MessagesFirestoreIO.saveToDatabaseAndUpdateID(messageJSON);
+        broadcastMessage(messageToBroadcast);
     }
 
     @Override
     public void onError(WebSocket webSocket, Exception e) {
         System.out.println("something went wrong " + e);
-
     }
 
     @Override
@@ -70,15 +58,11 @@ public class WebSocketConnection extends WebSocketServer {
      * @param message Message object to be sent to all the connected users.
      */
     private void broadcastMessage(Message message){
-        ObjectMapper messageToJson = new ObjectMapper();
         try {
+            ObjectMapper messageToJson = new ObjectMapper();
             String messagePayload = messageToJson.writeValueAsString(message);
-            System.out.println(connections.size());
-            System.out.println(connections);
-            for (WebSocket socket: connections) {
-                socket.send(messagePayload);
-                System.out.println("message sent to: " + socket.getRemoteSocketAddress().getAddress().getHostAddress());
-            }
+            broadcast(messagePayload);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

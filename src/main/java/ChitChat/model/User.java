@@ -6,25 +6,27 @@ public class User {
     private int userId;
     private String nickname;
     private String password;
-    private String connected;
+    private Boolean connected;
     private List<String> chatRooms;
+    private String currentRoom;
 
     public User() {
     }
 
-    public User(int userId, String nickname, String password, String connected) {
+    public User(int userId, String nickname, String password, Boolean connected) {
         this.userId = userId;
         this.nickname = nickname;
         this.password = password;
         this.connected = connected;
     }
 
-    public User(int userId, String nickname, String password, String connected, List<String> chatRooms) {
+    public User(int userId, String nickname, String password, Boolean connected, List<String> chatRooms, String currentRoom) {
         this.userId = userId;
         this.nickname = nickname;
         this.password = password;
         this.connected = connected;
         this.chatRooms = chatRooms;
+        this.currentRoom = currentRoom;
     }
 
     public int getUserId() {
@@ -51,11 +53,11 @@ public class User {
         this.password = password;
     }
 
-    public String getConnected() {
+    public Boolean getConnected() {
         return connected;
     }
 
-    public void setConnected(String connected) {
+    public void setConnected(Boolean connected) {
         this.connected = connected;
     }
 
@@ -73,8 +75,17 @@ public class User {
                 "userId=" + userId +
                 ", nickname='" + nickname + '\'' +
                 ", password='" + password + '\'' +
-                ", connected='" + connected + '\'' +
+                ", connected=" + connected +
                 ", chatRooms=" + chatRooms +
+                ", currentRoom='" + currentRoom + '\'' +
                 '}';
+    }
+
+    public String getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public void setCurrentRoom(String currentRoom) {
+        this.currentRoom = currentRoom;
     }
 }

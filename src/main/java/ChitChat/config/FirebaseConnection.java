@@ -10,9 +10,7 @@ import java.io.IOException;
 
 public class FirebaseConnection {
     public static void initializeFirebaseConnection() throws IOException {
-//        Dotenv dotenv = Dotenv.load();
         FileInputStream key = new FileInputStream("src/main/java/ChitChat/config/firestoreKey.json");
-//        FileInputStream key = new FileInputStream(dotenv.get("GG_CRED"));
         GoogleCredentials credentials = GoogleCredentials.fromStream(key);
         FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(credentials).build();
         FirebaseApp.initializeApp(options);
