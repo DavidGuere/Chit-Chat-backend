@@ -9,6 +9,7 @@ import org.java_websocket.server.WebSocketServer;
 import ChitChat.repository.MessagesFirestoreIO;
 
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.util.HashSet;
 
 /**
@@ -22,6 +23,10 @@ public class WebSocketConnection extends WebSocketServer {
     public WebSocketConnection(InetSocketAddress address) {
         super(address);
         this.connections = new HashSet<>();
+    }
+
+    public WebSocketConnection(int port){
+        super(new InetSocketAddress(port));
     }
 
     @Override
